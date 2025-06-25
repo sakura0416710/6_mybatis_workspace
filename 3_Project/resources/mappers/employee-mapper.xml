@@ -5,22 +5,23 @@
 	Employee [empNo=7839, pwd=A1D2M3IN, name=null, job=PRESIDENT, mgrNo=null, mgr=null, hireDate=1981-11-17, sal=5000, comm=3500, deptNo=10, dept=null, isAdmin=null, status=Y]
 	필드와 RESULT SET명 이 맞지 않으면 NULL로 나옴-->
 	
+	<!-- 1. 로그인 -->
 	<select id="login" parameterType="employee.model.vo.Employee" resultMap="empResultSet">
 	select * from v_selectemp 
 	where empno= #{empNo} and pwd= #{pwd} 
 	and status = 'Y'
+	
 	</select>
 	<!-- 컬럼명/우리가 설정한 필드명이랑 완벽하게 똑같지 않으면 위에 처럼 null이 나오니까 resultMap을 따로 만들어 준 뒤에 진행하면 된다 !  -->
 	<resultMap type="employee.model.vo.Employee" id="empResultSet">
-		<id column="" property=""/>
 		<!-- primary key로 되어있는 것. 없을 수도 있음. 근데 PK아니여도 넣기도 함 ㅎ
 		 Column:Result Set이름(테이블보고하셈)/property : 필드이름(setter명)
 	안 맞는거만 써도되지만 혹시 모르니까 전체 다 써주기 -->
+		
 		<result column="EMPNO" property="empNo"/>
 		<result column="PWD" property="pwd"/>
 		<result column="ENAME" property="name"/>
 		<result column="JOB" property="job"/>
-		<result column="MGR_NO" property="mgrNo"/>
 		<result column="MGR" property="mgrNo"/>
 		<result column="HIREDATE" property="hireDate"/>
 		<result column="SAL" property="sal"/>
@@ -29,6 +30,39 @@
 		<result column="DNAME" property="dept"/>
 		<result column="IS_ADMIN" property="isAdmin"/>
 		<result column="STATUS" property="status"/>
-		<!-- primary key로 되어있지 않은 나머지 -->
 	</resultMap>
+
+
+		<!-- primary key로 되어있지 않은 나머지 -->
+
+	<!-- 2. 전체사원조회 -->
+	<select id="selectAll" parameterType="employee.model.vo.Employee" resultMap="empResultSet">
+	select * from v_selectemp
+	</select>
+	
+	<insert id="insertEmployee" parameterType="employee.model.vo.Employee">
+	insert into emp values ( #{empNo}, #{name}, #{job}, #{mgrNo}, SYSDATE, #{sal}, #{comm}, #{deptNo}, default, #{isAdmin}, default)
+	<!-- select에만 resultType,resultMap이 들어감. 나머지 DML에는 이거필요없음 -->
+	</insert>
+	<!-- 3. 사원 번호 중복조회 -->
+	<select id="checkEmpNo" parameterType="int" resultType="int">
+	select count(*) from emp where empno= #{empNo}
+	</select>
+	
+	<update id="updateEmployee" parameterType="int">
+	update emp set pwd = #{pwd}, ename= #{name}, job=#{job}, sal = #{sal},comm=#{comm}, deptno=#{deptNo} where empno=#{empNo}
+	</update>
+	
+<!-- 	<update id="updateState" parameterType="map"> key값으로 value값을 가져오므로 
+ 		update emp set #{column} = #{value} where empno = #{id}
+ 		java.sql.SQLSyntaxErrorException: ORA-01747: 열명을 올바르게 지정해 주십시오 
+ 		문법에러이유: 		#{}이걸 위치홀더로 전달함 </update>										
+ 		${] : EL. JSP에서만 쓰는 건 아님											-->
+	<update id="updateState" parameterType="map">
+		update emp set ${column} = #{value} where empno = #{id}
+	</update>
+	
+
+
+	
 </mapper>

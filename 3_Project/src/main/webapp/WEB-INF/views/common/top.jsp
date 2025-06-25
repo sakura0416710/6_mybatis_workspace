@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	<c:set value="${ pageContext.servletContext.contextPath }" var="contextPath" scope="application"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +19,6 @@
 <%-- ${ PageContext.servletContext.contextPath} : EL버전 --%>
 <%--변수에 el버전 저장하고 그거호출. scope를 application으로 잡아서 어디든 사용할 수 있도록 하기 --%>
 
-	<c:set value="${ pageContext.servletContext.contextPath }" var="contextPath" scope="application"/>
 	<h1 align="center"><a href="${ contextPath}">JSP&amp;Servlet JDBC Project</a></h1>
 
 

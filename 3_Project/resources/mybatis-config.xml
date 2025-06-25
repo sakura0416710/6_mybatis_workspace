@@ -6,7 +6,9 @@
  enviornment가 여러개일때 기본연결할 거를 default안에 넣으면 됨.  -->
  	<settings>
  		<!-- camel case와 Snake case(언더바붙이는거)를 자동매핑시켜주는 설정 ex.mgr_no = mgrNo -->
- 		<setting name="mapUnderscoreToCamelCase" value=""/>
+ 		<setting name="mapUnderscoreToCamelCase" value="true"/>
+ 		<!-- 자바null과 mybatis의 null이랑 호환시켜주기 -->
+ 		<setting name="jdbcTypeForNull" value="NULL"/>
  	</settings>
  
  	<environments default="development">     
@@ -35,13 +37,6 @@
  		<mapper resource="mappers/employee-mapper.xml"/>
  	</mappers>
  	
- 
- 
- 
- 
- 
- 
- 
  
  
  

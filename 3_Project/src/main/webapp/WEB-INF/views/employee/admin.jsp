@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
 <!DOCTYPE html>
@@ -207,7 +207,7 @@
 			//등록버튼 눌렀을 때 작동시키기 위해 여기다 써줌
 			if(!validate){ //true일때
 				alert('사원번호를 확인하세요');
-				document.getElementbyId('id').focus();
+				document.getElementById('id').focus();
 				e.preventDefault();
 			}
 		}

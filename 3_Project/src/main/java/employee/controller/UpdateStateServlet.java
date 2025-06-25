@@ -1,7 +1,7 @@
 package employee.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.HashMap;
 
 import employee.model.service.EmployeeService;
 import jakarta.servlet.ServletException;
@@ -33,12 +33,18 @@ public class UpdateStateServlet extends HttpServlet {
 		String column = request.getParameter("column");
 		String value = request.getParameter("value");
 		
-		EmployeeService eService = new EmployeeService();
-
+		//보내야하는 데이터가 2개 이상일 때는 메소드 인자가 부족하기 때문에
+		//데이터들을 x에 담아서 보내야 함
+		//x :1)vo 클래스 2)Collection 
+		//HashMap<key, value>
+		HashMap<String, Object>map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("column", column);
+		map.put("value", value);
 		
-		int result = eService.updateState(id, column, value);
-		PrintWriter out = response.getWriter();
-		out.println(result == 1 ? "success" : "fail");//success + 줄바꿈이 반환되는 것!
+		EmployeeService eService = new EmployeeService();
+		int result = eService.updateState(map);
+		response.getWriter().println(result == 1 ? "success" : "fail");//success + 줄바꿈이 반환되는 것!
 	
 	}
 
