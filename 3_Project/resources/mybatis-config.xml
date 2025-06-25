@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration> <!-- 맞춰놓은 순서가 있어서 빨간줄 뜨면 그거맞춰서 배열만 하면됨 -->
+ <!-- 1.DB랑 연결하는 부분 작성 : 
+ environments 안에는 여러 개의 environment가 들어가고 id로 구분한다.
+ enviornment가 여러개일때 기본연결할 거를 default안에 넣으면 됨.  -->
+ 	<settings>
+ 		<!-- camel case와 Snake case(언더바붙이는거)를 자동매핑시켜주는 설정 ex.mgr_no = mgrNo -->
+ 		<setting name="mapUnderscoreToCamelCase" value=""/>
+ 	</settings>
+ 
+ 	<environments default="development">     
+ 		<environment id="development">
+ 			<transactionManager type="JDBC"/>
+ 			
+ 			<!-- 
+ 				transactionManager : 트랜잭션을 누가 관리할 것인가에 대한 설정
+ 				JDBC		: ㅓJDBC에서 커밋과 롤백을 직접 처리, 즉 수동 commit 진행.
+ 				MANAGED 	:  트랜잭션에 직접영향 행사하지 않음, 즉 자동 commit(트랜잭션 시점을 결정불가)
+ 				POOLED 		: 최초 커넥션 객체 생성하고 해당정보를 Pool영역에 저장하고 이후 커넥션 객체 생성할때 재사용함.웹어플리케이션은 POOLED가 적당함.
+ 							  객체를 생성하여 database와 연결하는 시간이 단축됨
+ 				UNPOOLED	: 별도 저장없이 객체 호출 시 매번 생성해서 사용, 연결 별로 없는 코드 쓸 때 간단하게 구현가능
+ 			-->
+ 			<dataSource type="POOLED"> <!-- 실제 접속할 DB설정, type(ConnectionPool사용할건지에 대한 여부작성) -->
+ 				<property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+ 				<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+ 				<property name="username" value="SCOTT"/>
+ 				<property name="password" value="SCOTT"/>
+ 			</dataSource>
+ 		</environment>
+ 	</environments>
+ 	
+ 	<!-- 2. mapper의 위치를 설정 -->
+ 	<mappers>
+ 		<mapper resource="mappers/employee-mapper.xml"/>
+ 	</mappers>
+ 	
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+</configuration>
