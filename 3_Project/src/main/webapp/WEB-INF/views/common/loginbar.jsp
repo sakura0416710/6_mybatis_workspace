@@ -24,6 +24,8 @@
 			<b>${loginUser.name }님, 반갑습니다.</b><br/><br/>
 			<a href="${contextPath }/editPage.me">내 정보 수정</a>&nbsp;&nbsp;&nbsp;&nbsp;
 			<a href="${contextPath }/logout.me">로그아웃</a>
+			<br/><br/>
+			<a href="${contextPath }/list.bo">>>>게시판</a>
 		</c:if>
 	</div>
 	

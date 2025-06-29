@@ -19,7 +19,7 @@
 <%-- ${ PageContext.servletContext.contextPath} : EL버전 --%>
 <%--변수에 el버전 저장하고 그거호출. scope를 application으로 잡아서 어디든 사용할 수 있도록 하기 --%>
 
-	<h1 align="center"><a href="${ contextPath}">JSP&amp;Servlet JDBC Project</a></h1>
+	<h1 align="center"><a href="${ contextPath}">MyBatis Project</a></h1>
 
 
 </body>

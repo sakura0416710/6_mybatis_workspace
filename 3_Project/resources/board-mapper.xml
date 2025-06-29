@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardMapper">
+	<select id="getListCount" resultTyle="_int">
+		select count(*)from board where status='Y'
+	</select>
+	<select id="selectBoardList" resultType="board.model.vo.Board">
+		select board_no, title, content, writer as empno, ename as writer, count, create_date, update_date, is_notice,
+		status from board
+			join emp on(writer = empno)
+		where board.status = 'Y'
+		order by board_no desc;
+	</select>
+	
+	<insert id="insertBoard" parameterType="board.model.vo.Board">
+		insert into Board
+		values(seq_board.nextval, #{title}, #{content}, #{empNo}, default, default, default, #{isNotice}, default);
+	
+	</insert>
+	
+</mapper>
