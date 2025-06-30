@@ -35,6 +35,7 @@
  	<!-- 2. mapper의 위치를 설정 -->
  	<mappers>
  		<mapper resource="mappers/employee-mapper.xml"/>
+ 		<mapper resource="/mappers/board-mapper.xml"/>
  	</mappers>
  	
  
