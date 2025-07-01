@@ -20,10 +20,17 @@
 		<form action="${ contextPath }/insertBoard.bo" method="post">
 			<table>
 				<tr>
+<<<<<<< HEAD
 					<c:if test="${ loginUser.isAdmin !='Y'}">
 						<td colspan="2"><input type="text" name="title" placeholder="제목" size="65"></td>
 					</c:if>
 					<c:if test="${ loginUser.isAdmin =='Y'}">
+=======
+					<c:if test="${ loginUser.isAdmin != 'Y' }">
+						<td colspan="2"><input type="text" name="title" placeholder="제목" size="65"></td>
+					</c:if>
+					<c:if test="${ loginUser.isAdmin == 'Y' }">
+>>>>>>> branch 'master' of https://github.com/sakura0416710/6_mybatis_workspace.git
 						<td><input type="text" name="title" placeholder="제목" size="55"></td>
 						<td><input type="checkbox" name="isNotice" id="isNotice" value="Y"> <label for="isNotice">공지</label></td>
 					</c:if>

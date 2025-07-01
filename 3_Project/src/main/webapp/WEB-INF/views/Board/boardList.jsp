@@ -40,6 +40,7 @@
 				</tr>
 			</c:if>
 			<c:if test="${!empty list }">
+<<<<<<< HEAD
 				<c:forEach var="b" items="${list}">
 					<tr>
 						<td>${b.isNotice == 'N' ? '' : '[공지]' }</td>
@@ -158,6 +159,71 @@
 	
 	</script>
 		
+=======
+				<c:forEach>
+					<tr>
+						<td>${b.isNotice == 'N' ? '' : '[공지]' }</td>
+						<td>${b.boardNo }</td>
+						<td>${b.title }</td>
+						<td>${b.writer }</td>
+						<td>${b.createDate }</td>
+						<td>${b.count }</td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			
+		</table>
+		<!-- 페이지 버튼 만들기 -->
+		<br/><br/><br/>
+		<div class="pagingArea" align="center">
+		
+			<!-- 이전 --> 
+			<c:if test="${pi.currentPage <=1 }">
+				<span class="disable">[이전]></span>			
+			</c:if>
+			<c:url value="${loc }" var="blistBack">		<!-- 현재 url : (contextPath/url)기본적으로 list.bo를 가지고 있게 만들기. c:url에서만 사용가능 -->
+				<c:param name="page" value="${pi.currentPage-1 }"/>  <!-- 쿼리스트링 만들기 -->
+			</c:url>
+			<a href="blistBack">[이전]</a>
+			
+			<!-- 숫자 -->
+			<c:forEach begin="${pi.startPage }" end="${pi.endPage } " var="p">
+				<c:if test="${p eq pi.currentPage }">
+					<font color="red"><b>[${p}]</b></font>
+				</c:if>
+				<c:if test="${p ne pi.currentPage }">
+					<c:url value="${loc }" var="blistCheck">
+						<c:param name="page" value="${p }"/>
+					</c:url>
+					<a href="${blistCheck }">${ p }</a>
+				</c:if>
+			</c:forEach>
+			
+			<!-- 다음 -->
+			<c:if test="${pi.currentPage >= pi.maxPage }">
+				<span class="disable">[다음]></span>			
+			</c:if>
+			<c:if>
+				<c:url value="${loc }" var="blistNext">		<!-- 현재 url : (contextPath/url)기본적으로 list.bo를 가지고 있게 만들기. c:url에서만 사용가능 -->
+					<c:param name="page" value="${pi.currentPage+1}"/>  <!-- 쿼리스트링 만들기 -->
+				</c:url>
+				<a href="${blistNext }">[다음]</a>
+			</c:if>
+		</div>
+	</div>
+	<script>
+		window.onload = () => {
+			document.getElementById('writeLabel').addEventListender('click', () => {
+				if('${loginUser}' == ''){
+					alert('로그인 후 이용해주세요')
+				} else { 
+					location.href="${contextPath}/writeBoardPage.bo";
+				}
+			});
+		}
+	
+	</script>
+>>>>>>> branch 'master' of https://github.com/sakura0416710/6_mybatis_workspace.git
 	
 	
 	
