@@ -98,19 +98,91 @@
 				});
 			}
 			
+			document.getElementById('submitReply').addEventListener('click', () => {
+				const content = document.getElementById('replyContent');
+				$.ajax({   // 댓글내용, 게시판번호
+					url: '${contextPath}/insertReply.bo',
+					data : {content:content.value, bId:${b.boardNo}},
+					type:'post',
+					success : data=>{
+						//console.log(data);
+						if(data == 1){
+							content.value='';
+							selectReplyList();
+						} else {
+							alert('댓글 등록 실패하였습니다.');
+						}
+					},
+					error : data=>console.log(data)
+				});
+			});
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+			setInterval( () => {
+				selectReplyList();
+			}, 1000);
+		}
+		
+		const selectReplyList = () => {
+			$.ajax({ //JS DOM부분 참고하기
+				url : '${contextPath}/selectReplyList.bo',
+				data : {bId:${b.boardNo}},
+				dataType : 'json',
+				success: data=>{
+					console.log(data);
+					const replyList = document.querySelector('#replyList');
+					replyList.innerHTML = '';
+					if(data.length == 0){
+						const tr = document.createElement('tr');
+						
+						const td = document.createElement('td');
+						td.setAttribute('colspan', 3);
+						td.setAttribute('align', 'center');
+						td.innerHTML = '<br>등록된 댓글이 없습니다. <br>이 게시물의 첫 댓글이 되어주세요!';
+						
+						tr.appendChild(td);
+						replyList.appendChild(tr);
+					} else { 						 //eml안에는 객체가 있으므로 key로 접근해서 value꺼내오기
+						for(const elm of data){
+							const writer = ele.writer;
+							const content = elm.content;
+							const date = elm.createDate;
+							
+							//tr과 td만들고 그 안에 value집어넣기
+							const tr = document.createElement('tr');
+							
+							const td1 = document.createElement('td');
+							const td1Val = document.createTextNode(writer);
+							td1.appendChild(td1Val);
+							td1.style.width = '80px';
+							
+							const td2 = docuement.createElement('td');
+							const td2Val = document.createTextNode(content);
+							td2.appendChild(td2Val);
+							
+							const td3 = document.createElement('td');
+							const td3Val = document.createTextNode(date);
+							td3.appendChild(td3Val);
+							
+							tr.appendChild(td1);
+							tr.appendChild(td2);
+							tr.appendChild(td3);
+							
+							replyList.appendChild(tr);
+						}
+					}
+				},
+				error:data => console.log(data)
+			});
 			
 		}
+		
+		
+		
+		
+		
+		
+		
+		
 	</script>
 </body>
 </html>

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import Board.model.service.BoardService;
 import Board.model.vo.Board;
 import Board.model.vo.PageInfo;
-import common.Pageination;
+import common.Pagination;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -41,13 +41,13 @@ public class SelectBoardListServlet extends HttpServlet {
 			
 		//전체 게시글의 개수 
 			int listCount = service.getListCount();
-			PageInfo pi = Pageination.getPageInfo(currentPage, listCount);
+			PageInfo pi = Pagination.getPageInfo(currentPage, listCount);
 			ArrayList<Board> list = service.selectBoardList(pi);
 			
 			request.setAttribute("list", list);
 			request.setAttribute("pi",pi);
 			
-			request.getRequestDispatcher("/WEB-INF/views/board/boardList.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/Board/boardList.jsp").forward(request, response);
 	}
 	
 

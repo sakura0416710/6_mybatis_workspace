@@ -40,7 +40,6 @@ public class InsertBoardServlet extends HttpServlet {
 		int result = new BoardService().insertBoard(b);
 		if(result > 0) {
 			response.sendRedirect("list.bo");
-			request.getRequestDispatcher("WEB-INF/board/boardList.jsp").forward(request, response);
 		} else {
 			request.setAttribute("msg", "게시글 등록 실패");
 			request.getRequestDispatcher("WEB-INF/views/common/errorPage.jsp").forward(request, response);

@@ -1,6 +1,7 @@
 package Board.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -59,6 +60,22 @@ public class BoardDAO {
 	//댓글 상세보기
 	public ArrayList<Reply> selectReplyList(SqlSession session, int bId) {
 		return (ArrayList)session.selectList("boardMapper.selectReplyList", bId);
+	}
+
+	//검색 해서 전체 게시글 조회
+	public int getSearchListCount(SqlSession session, HashMap<String, String> map) {
+		return session.selectOne("boardMapper.getSearchListCount", map);
+	}
+	
+//검색단 페이지네이션 만들기
+	public ArrayList<Board> selectSearchList(SqlSession session, HashMap<String, String> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage() -1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset,pi.getBoardLimit());
+		return (ArrayList)session.selectList("boardMapper.selectSearchList", map, new RowBounds(offset, pi.getBoardLimit()));
+	}
+
+	public int insertReply(SqlSession session, Reply r) {
+		return session.selectOne("boardMapper.insertReply", r);
 	}
 	
 	

@@ -40,7 +40,7 @@
 				</tr>
 			</c:if>
 			<c:if test="${!empty list }">
-				<c:forEach>
+				<c:forEach var="b" items="${list}">
 					<tr>
 						<td>${b.isNotice == 'N' ? '' : '[공지]' }</td>
 						<td>${b.boardNo }</td>
@@ -62,38 +62,66 @@
 				<span class="disable">[이전]></span>			
 			</c:if>
 			<c:url value="${loc }" var="blistBack">		<!-- 현재 url : (contextPath/url)기본적으로 list.bo를 가지고 있게 만들기. c:url에서만 사용가능 -->
-				<c:param name="page" value="${pi.currentPage-1 }"/>  <!-- 쿼리스트링 만들기 -->
+				<c:param name="page" value="${ pi.currentPage-1 }"/>  <!-- 쿼리스트링 만들기 -->
+				<c:if test="${condition != null }"> <!-- 검색했을 때 페이지 넘겨도url이 유지되도록 하기 -->
+					<c:param name="condition" value="${condition }"/>
+					<c:param name = "value" value ="${value }"/>
+				</c:if>
 			</c:url>
 			<a href="blistBack">[이전]</a>
 			
 			<!-- 숫자 -->
-			<c:forEach begin="${pi.startPage }" end="${pi.endPage } " var="p">
+			<c:forEach begin="${pi.startPage}" end="${pi.endPage}"  var="p">
 				<c:if test="${p eq pi.currentPage }">
 					<font color="red"><b>[${p}]</b></font>
 				</c:if>
 				<c:if test="${p ne pi.currentPage }">
 					<c:url value="${loc }" var="blistCheck">
 						<c:param name="page" value="${p }"/>
+						<c:if test="${condition != null }"> 
+							<c:param name="condition" value="${condition }"/>
+							<c:param name = "value" value ="${value }"/>
+						</c:if>
 					</c:url>
-					<a href="${blistCheck }">${ p }</a>
+					<a href="${blistCheck}">${ p }</a>
 				</c:if>
 			</c:forEach>
 			
 			<!-- 다음 -->
-			<c:if test="${pi.currentPage >= pi.maxPage }">
+			<c:if test="${pi.currentPage >= pi.maxPage}">
 				<span class="disable">[다음]></span>			
 			</c:if>
 			<c:if test="${pi.currentPage < pi.maxPage}">
 				<c:url value="${loc }" var="blistNext">		 -->
-					<c:param name="page" value="${pi.currentPage+1}"/> 
+					<c:param name="page" value="${pi.currentPage+1}"/> <!-- 검색했을 때 페이지 넘겨도url이 유지되도록 하기 -->
+						<c:if test="${condition != null }"> 
+							<c:param name="condition" value="${condition }"/>
+							<c:param name = "value" value ="${value }"/>
+						</c:if>
 				</c:url>
-				<a href="${blistNext }">[다음]</a>
+				<a href="${blistNext}">[다음]</a>
 			</c:if>
 		</div>
 	</div>
+	
+	<br/>
+	
+	<div id="searchArea" align="center">
+		<label>검색조건</label>
+		<select>
+			<option value="-">------------</option>
+			<option value="writer">작성자</option>
+			<option value="title">제목</option>
+			<option value="content">내용</option> 
+		</select>
+		<input type="search">
+		<button>검색하기</button>
+	</div>
+	
+	
 	<script>
 		window.onload = () => {
-			document.getElementById('writeLabel').addEventListender('click', () => {
+			document.getElementById('writeLabel').addEventListener('click', () => {
 				if('${loginUser}' == ''){
 					alert('로그인 후 이용해주세요')
 				} else { 
@@ -102,29 +130,34 @@
 			});
 			
 			//게시글 클릭 -> 상세페이지 이동
-			const tds = document.querySelectorAll('td');'
+			const tds = document.querySelectorAll('td');
 				//td에 직접 onclick이벤트 걸지말고 for문
 			for(const td of tds){
 				const parent = td.parentElement;
-				td.addEventListener('mouseenter',() => {
+				td.addEventListener('mouseenter', () => {
 					parent.style.backgroundColor = 'darkgray';
 					parent.style.cursor = 'pointer';
 				});
-				td.addEventListener('mouseout' () => {
+				td.addEventListener('mouseout' , () => {
 					parent.style.backgroundColor = 'white';
 				});
-				td.addEventListener('click' () => { //글번호로 조회하기(유일성) (1번은 공지니까 그 다음부터 글이 시작됨)
+				td.addEventListener('click' , () => { //글번호로 조회하기(유일성) (1번은 공지니까 그 다음부터 글이 시작됨)
 					location.href = '${contextPath}/selectBoard.bo?bId='+ parent.children[1].innerText;
 				});
 				
 			}
-			
-			
-			
-			
+			//검색하기 기능추가
+			document.getElementById('searchArea').querySelector('button').addEventListener('click', function() {
+				//무슨값으로 검색할지(버튼 기준 한 번 앞으로 가면 value)
+				const value = this.previousElementSibling.value;
+				//검색조건(버튼기준(나) 두번 앞으로 가면 조건)
+				const condition = this.previousElementSibling.previousElementSibling.value;
+				location.href='${contextPath}/search.bo?value='+value+'$condition'+condition;
+			})
 		}
 	
 	</script>
+		
 	
 	
 	

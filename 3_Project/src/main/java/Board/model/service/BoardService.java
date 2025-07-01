@@ -3,6 +3,7 @@ package Board.model.service;
 import static common.Template.getSqlSession;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -91,6 +92,31 @@ public class BoardService {
 		SqlSession session = getSqlSession();
 		ArrayList<Reply> list = bDAO.selectReplyList(session, bId);
 		return list;
+	}
+//검색 : 전체 게시글 개수 찾기(현재 페이지를 이용해서)
+	public int getSearchListCount(HashMap<String, String> map) {
+		SqlSession session = getSqlSession();
+		int result = bDAO.getSearchListCount(session, map);
+		session.close();
+		return result;
+	}
+
+	public ArrayList<Board> selectSearchList(HashMap<String, String> map, PageInfo pi) {
+		SqlSession session = getSqlSession();
+		ArrayList<Board>list = bDAO.selectSearchList(session, map, pi);
+		session.close();
+		return list;
+	}
+
+	public int insertReply(Reply r) {
+		SqlSession session = getSqlSession();
+		int result = bDAO.insertReply(session, r);
+		if(result > 0) {
+			session.commit();
+		} else {
+			session.rollback();
+		} session.close();
+		return result;
 	}
 
 	

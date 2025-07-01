@@ -15,8 +15,18 @@
 	</select>
 	
 	<insert id="insertBoard" parameterType="Board.model.vo.Board">
-		insert into Board
-		values(seq_board.nextval, #{title}, #{content}, #{empNo}, default, default, default, #{isNotice}, default);
+		insert into board (
+		    board_no,
+		    title,
+		    content,
+		    writer,
+		    count,
+		    create_date,
+		    update_date,
+		    is_notice,
+		    status
+		)
+		values(seq_board.nextval, #{title}, #{content}, #{empNo}, 0, sysdate, sysdate,#{isNotice}, 'Y')
 	
 	</insert>
 	
@@ -48,13 +58,94 @@
 		set count = count +1
 		where board_no = #{bId}
 	</update>
+
 	<select id="selectReplyList" parameterType="_int" resultType="Board.model.vo.Board">
 		select reply_no, content, writer as empno, ename as writer, create_date, update_date,
 			ref_board, reply.status
 		from reply
 			join emp on (writer = empno)
-		when ref_board = #{bId} and reply.status='Y'
+		where ref_board = #{bId} and reply.status='Y'
 	</select>
+	
+	
+	<!--검색해서 나오는 전체 게시글 조회하기 -->
+	<select id="getSearchListCount" parameterType="map" resultType="_int"> <!-- 동적쿼리 적용 -->
+		select count (*)
+		from board b
+		    join emp e on (b.writer = e.empNo)
+		where 
+		<if test="condition == 'writer'">
+			ename=#{value}
+		</if>
+		<if test="condition == 'title' ">
+			title like '%' || #{value} || '%'
+		</if>
+		<if test="condition =='content'">
+			content like '%${value}%'
+		</if>
+		<if test="condition != 'writer' and condition != 'title' and condition != 'content'">
+			(ename= #{value} or title like  '%${value}%' or content like  '%${value}%')
+		</if>
+			and board.status='y';
+	</select>
+	
+	<!-- 검색단 페이지네이션 만들기 -->
+	<select id="selectSearchList" parameterType="map" resultType="Board.model.vo.Board">
+			select board_no, title, content, writer as empno, ename as writer, count, create_date, update_date, is_notice,
+				board.status 
+			from board
+				join emp on (writer = empno)
+				where board.status = 'Y'
+		<choose>
+			<when test="condition == 'writer'">
+				and ename=#{value}
+			</when>
+			<when test="condition == 'title' or condition == 'content'">
+					and ${condition} like '%' || #{value} || '%'
+			</when>
+			<otherwise>
+				and (ENAME= #{value} OR title like  '%${value}%' OR CONTENT LIKE  '%${value}%')
+			</otherwise>
+		</choose>		
+			order by board_no desc
+	</select>
+		<insert id="insertReply" parameterType="Board.model.vo.Reply">
+	insert into reply (
+		reply_no,
+		content,
+		writer,
+		create_date,
+		update_date,
+		ref_board,
+		status
+	) values (
+		seq_reply.nextval,
+		#{content},
+		#{empNo},
+		sysdate,
+		sysdate,
+		#{refBoard},
+		'Y'
+	)
+</insert>
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

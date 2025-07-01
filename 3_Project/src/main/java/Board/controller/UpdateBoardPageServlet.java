@@ -32,7 +32,7 @@ public class UpdateBoardPageServlet extends HttpServlet {
 		int bId = Integer.parseInt(request.getParameter("bId"));
 		Board b = new BoardService().selectBoard(bId, null);
 		request.setAttribute("b", b);
-		request.getRequestDispatcher("WEB-INF/views/board/updateBoardPage.jsp").forward(request, response);
+		request.getRequestDispatcher("WEB-INF/views/Board/updateBoardPage.jsp").forward(request, response);
 	}
 
 	/**

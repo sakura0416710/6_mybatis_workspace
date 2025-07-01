@@ -1,10 +1,9 @@
 package Board.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.PrintWriter;
 
 import Board.model.service.BoardService;
-import Board.model.vo.Board;
 import Board.model.vo.Reply;
 import employee.model.vo.Employee;
 import jakarta.servlet.ServletException;
@@ -14,16 +13,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class SelectBoardServlet
- */ //게시글 상세조회 서블릿
-@WebServlet("/selectBoard.bo")
-public class SelectBoardServlet extends HttpServlet {
+ * Servlet implementation class InsertReplyServlet
+ */
+@WebServlet("/insertReply.bo")
+public class InsertReplyServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SelectBoardServlet() {
+    public InsertReplyServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,21 +31,41 @@ public class SelectBoardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//게시글 상세보기 + 조회수 올리기 (같은 비즈니스 단 = 같은 model을 가진다는 뜻)
+		/*mybatis로 이용하여 댓글등록하기.
+		 * 등록 결과를 view로 보내주고
+		 * 등록이 성공하면 textarea에 썻던 내용 지우기 ->새로고침 하면 새 댓글이 보이게 됨
+		 * 등록이 실패하면 실패등록했다고 알림창 띄우기
+		 */
+		//1.content랑 게시글 번호, 작성자 받아오기
+		String content = request.getParameter("content");
 		int bId = Integer.parseInt(request.getParameter("bId"));
-		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
+		int empNo = ((Employee)request.getSession().getAttribute("loginUser")).getEmpNo();
 		
-		Board b = new BoardService().selectBoard(bId, loginUser);
-		ArrayList<Reply> list = new BoardService().selectReplyList(bId);
-		if(b != null) {
-			request.setAttribute("b",b);
-			request.setAttribute("list", list);
-			request.getRequestDispatcher("WEB-INF/views/Board/boardDetail.jsp").forward(request, response);
-			
+		//담아서
+		Reply r  = new Reply();
+		r.setContent(content);
+		r.setRefBoard(bId);
+		r.setEmpNo(empNo);
+		
+		//보내주기
+		int result = new BoardService().insertReply(r);
+				
+		//등록결과를 ajax 받아와서  view로 뿌리기
+		response.getWriter().print(result);
+		
+		if(result > 0) {
+			response.sendRedirect("");
+			request.getRequestDispatcher("WEB-INF/Board/boardDetail.jsp").forward(request, response);
 		} else {
-			request.setAttribute("msg", "해당 게시글은 존재하지 않습니다.");
+			request.setAttribute("msg", "댓글 등록 실패");
 			request.getRequestDispatcher("WEB-INF/views/common/errorPage.jsp").forward(request, response);
 		}
+		
+		
+		
+		
+		
+		
 	}
 
 	/**

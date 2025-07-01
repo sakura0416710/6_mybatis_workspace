@@ -27,7 +27,7 @@ public class WriteBoardPage extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//페이지 이동만 하는 서블릿
-		request.getRequestDispatcher("WEB-INF/views/board/writeBoardPage.jsp").forward(request, response);
+		request.getRequestDispatcher("WEB-INF/views/Board/writeBoardPage.jsp").forward(request, response);
 	}
 
 	/**

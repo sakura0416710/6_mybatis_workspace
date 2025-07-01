@@ -2,7 +2,7 @@ package common;
 
 import Board.model.vo.PageInfo;
 
-public class Pageination {
+public class Pagination {
 	//페이지 처리를 하기위한 클래스 만들어두기
 	//페이징처리 : 현재 페이지와 전체 게시글 개수가 필요
 	public static PageInfo getPageInfo(int currentPage, int listCount) {
